@@ -10,15 +10,15 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t react-app .'
+                sh 'docker build -t static-site .'
             }
         }
 
         stage('Run Docker Container') {
             steps {
                 sh '''
-                    docker rm -f react-container || true
-                    docker run -d --name react-container -p 5000:5000 react-app
+                    docker rm -f static-site-container-v3 || true
+                    docker run -d --name static-site-container-v3 -p 8081:80 static-site
                 '''
             }
         }
