@@ -10,21 +10,16 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build('react-app')
-                }
+                sh 'docker build -t react-app .'
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                script {
-                    // Clean up old container if it exists
-                    sh 'docker rm -f react-container || true'
-
-                    // Run the new container
-                    docker.image('react-app').run('-d --name react-container -p 5000:5000')
-                }
+                sh '''
+                    docker rm -f react-container || true
+                    docker run -d --name react-container -p 5000:5000 react-app
+                '''
             }
         }
     }
