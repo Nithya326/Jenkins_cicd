@@ -4,14 +4,14 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/Nithya326/Jenkins_cicd.git'
+                git branch: 'main', url: 'https://github.com/Nithya326/Jenkins_cicd.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build('your-image-name')
+                    docker.build('react-app')
                 }
             }
         }
@@ -19,7 +19,11 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    docker.image('your-image-name').run('-p 5000:5000')
+                    // Clean up old container if it exists
+                    sh 'docker rm -f react-container || true'
+
+                    // Run the new container
+                    docker.image('react-app').run('-d --name react-container -p 5000:5000')
                 }
             }
         }
